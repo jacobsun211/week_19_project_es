@@ -1,4 +1,4 @@
-from ..connection.kafka import producer
+from connection.kafka import producer
 import json
 
 WRITING_TOPIC = "RAW"
@@ -6,7 +6,11 @@ WRITING_TOPIC = "RAW"
 
 def kafka_send(images):
     for image in images:
-        image = json.dumps(image.model_dump()).encode('utf-8')
+        print('before')
+        print(image)
+        print(type(image))
+        image = json.dumps(image).encode('utf-8')
+        print('afta')
         producer.produce("RAW", image)
         producer.poll(0)  
 

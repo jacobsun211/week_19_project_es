@@ -15,5 +15,6 @@ def get_clean_text(images):
 
         clean_text = text.replace("\x0c", "").strip() # cleaning the text
         image["text"] = clean_text
+        print('extract:', type(image))
         return image
 
