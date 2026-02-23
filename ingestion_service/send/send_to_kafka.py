@@ -1,17 +1,14 @@
 from connection.kafka import producer
 import json
 
+
 WRITING_TOPIC = "RAW"
 
+class KafkaSender:
 
-def kafka_send(images):
-    for image in images:
-        print('before')
-        print(image)
-        print(type(image))
-        image = json.dumps(image).encode('utf-8')
-        print('afta')
+    def send(self, image):
+        #                           ! since its a class object, we need to convert it to dict and THEN to str
+        image = json.dumps(image.__dict__).encode('utf-8')
         producer.produce("RAW", image)
-        producer.poll(0)  
+        producer.poll(0)
 
-    return {"count": len(images)}
