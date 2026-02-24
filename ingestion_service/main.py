@@ -1,9 +1,18 @@
 from fastapi import FastAPI
-from connection.kafka import producer
-from connection.mongo import client
-from metadata import MetadataExtractor
-from text_extractor import TextExtractor
-from send.send_to_kafka import KafkaSender
+import logging
+from .connection.mongo import client
+from .metadata import MetadataExtractor
+from .text_extractor import TextExtractor
+from .send.send_to_kafka import KafkaSender
+from shared.logging_config import configure_logging
+
+configure_logging("ingestion_service")
+
+
+
+logging.getLogger("ingestion_service.kafka_sender")
+logger = logging.getLogger(__name__)
+
 
 db = client["week19"]
 collection = db["images"]
@@ -39,6 +48,7 @@ def get_file():
         kafka.send(image_with_text)
     return {"count": len(images)}
 
-# uvicorn main:app --reload
 
     
+# from week_19_project_es/
+# uvicorn ingestion_service.main:app --reload

@@ -27,12 +27,15 @@ EXCLUDED_DIR_NAMES = {
     "general",
     "arc",
     "ignore",
-    "data"
+    "data",
+    
 }
 
 EXCLUDED_FILE_NAMES = {
     ".gitignore",
     ".dockerignore",
+    "requirements.txt",
+    "chat"
 }
 
 
