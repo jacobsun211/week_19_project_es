@@ -46,9 +46,9 @@ def get_file():
     for image in images:
         image_with_text = text.get_clean_text(image) # add the text
         kafka.send(image_with_text)
+        # print(image_with_text.text)
     return {"count": len(images)}
 
 
     
-# from week_19_project_es/
 # uvicorn ingestion_service.main:app --reload
