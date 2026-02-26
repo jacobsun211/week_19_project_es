@@ -1,5 +1,5 @@
 from confluent_kafka import Consumer, Producer
-from analytics.models import ImageData
+from shared.models import ImageData
 import json
 import os
 from confluent_kafka import Producer
@@ -49,7 +49,12 @@ def clean():
 
             image = json.loads(image.value()) # from str to dict
             image = ImageData(**image) # from dict to class object
-            image.text = image.text.replace("\x0c", "").replace("?", "").replace("!", "").strip().lower() # cleaning the text
+            print(image.text)
+            print(type(image.text))
+            print(len(image.text))
+            for i in len(image.text):
+                  print(i)
+            # image.text = image.text.replace("\x0c", "").replace("?", "").replace("!", "").strip().lower() # cleaning the text
             send_to_kafka(image)
          
 clean()

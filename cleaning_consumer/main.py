@@ -1,9 +1,9 @@
 from confluent_kafka import Consumer, Producer
-from cleaning_consumer.models import ImageData
+from shared.models import CleanedData
 import json
 import os
 from confluent_kafka import Producer
-import nltk
+import re
 from nltk.corpus import stopwords #
 from nltk.tokenize import word_tokenize #
 import logging
@@ -46,12 +46,17 @@ def remove_stop_words(text):
     # split the text to a list of words
     tokens = word_tokenize(text.lower())
     # setting the language
-    stopwords = stopwords.words('english')
+    stop_words = set(stopwords.words('english'))
     # remove stop words
-    cleaned_text = [t for t in tokens if t not in stopwords]
+    cleaned_text = [t for t in tokens if t not in stop_words]
+    print(cleaned_text)
+    print(type(cleaned_text))
+    print(len(cleaned_text))
+    for i in cleaned_text:
+        print(i)
     return cleaned_text
 
-def send_to_kafka(image: ImageData):
+def send_to_kafka(image: CleanedData):
         print(image.text)
         imageName = image.imageName
         #                           ! since its a class object, we need to convert it to dict and THEN to str
@@ -73,11 +78,10 @@ def clean():
 
 
             image = json.loads(image.value()) # from str to dict
-            image = ImageData(**image) # from dict to class object
-            image.text = image.text.replace("\x0c", "").replace("?", "").replace("!", "").strip() # cleaning the text       
-           
+            image = CleanedData(**image) # from dict to class object
+            image.cleaned_text = re.sub(r"[?!-//)|:.,$#%@`]",'', image.text)
 
-            image.text = remove_stop_words(image.text)
+            image.cleaned_text = remove_stop_words(image.cleaned_text)
             send_to_kafka(image)
          
 clean()

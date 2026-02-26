@@ -5,6 +5,8 @@ import os
 from confluent_kafka import Producer
 import logging
 from shared.logging_config import configure_logging
+from shared.models import ImageData
+
 
 configure_logging("elastic_consumer.main")
 logger = logging.getLogger(__name__)
